@@ -8,9 +8,9 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import javax.persistence.*;
 import java.util.Date;
 
+@Data
 @Entity
 @Table(name = "distributed_lock")
-@Data
 @EntityListeners(AuditingEntityListener.class)
 public class DistributeLock {
     @Id
@@ -35,6 +35,5 @@ public class DistributeLock {
     }
 
     public DistributeLock() {
-
     }
 }

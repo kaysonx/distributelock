@@ -22,7 +22,7 @@ public class LockProvider {
         this.executorService = executorService;
     }
 
-    //互斥 - 重复调用，抛出异常
+    //互斥锁，unlock 或者 超时后可获得
     public boolean lock(String serviceName, String lockKey, String owner, int expireSeconds) {
         if (existLock(serviceName, lockKey, owner)) {
             return false;
@@ -34,6 +34,7 @@ public class LockProvider {
         } else {
             distributeLockDAO.addLock(serviceName, lockKey, owner, expireSeconds);
         }
+
         return true;
     }
 
@@ -62,12 +63,12 @@ public class LockProvider {
         lockOptional.ifPresent(lock -> distributeLockDAO.deleteById(lock.getId()));
     }
 
-    //没有过期的锁
     public boolean existLock(String serviceName, String lockKey, String owner) {
         final int existLock = distributeLockDAO.exists(serviceName, lockKey, owner);
         return existLock == 1;
     }
 
+    //For Scheduling
     public int releaseAllTimeoutLock() {
         List<DistributeLock> timeoutLocks = distributeLockDAO.findAllTimeoutLocks();
         distributeLockDAO.deleteAll(timeoutLocks);

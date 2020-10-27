@@ -34,11 +34,12 @@ public class WatchDog implements Runnable {
             @Override
             public void run() {
                 if (!businessThread.isAlive() || !lockProvider.existLock(serviceName, lockKey, owner)) {
-                    log.info("Lock is released, will shutdown self...");
+                    log.info("Lock for {} is released, will shutdown self...", lockKey);
                     timer.cancel();
+                } else {
+                    log.info("Will renew lock now...");
+                    lockProvider.renewLock(serviceName, lockKey, owner);
                 }
-                log.info("Will renew lock now...");
-                lockProvider.renewLock(serviceName, lockKey, owner);
             }
         }, 0, refreshInterval * 1000);
     }

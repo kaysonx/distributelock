@@ -8,10 +8,10 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 @SpringBootApplication
 @EnableJpaAuditing
 @EnableScheduling
-public class DistributelockApplication {
+public class DistributeLockApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(DistributelockApplication.class, args);
+        SpringApplication.run(DistributeLockApplication.class, args);
     }
 
 }
