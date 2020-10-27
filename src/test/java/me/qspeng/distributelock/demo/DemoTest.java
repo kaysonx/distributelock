@@ -21,6 +21,9 @@ public class DemoTest {
     @Autowired
     BusinessUseCase businessUseCase;
 
+    @Autowired
+    MultiThreadCase multiThreadCase;
+
     @Test
     void should_only_one_operation_get_lock() {
         normalCase.run();
@@ -54,5 +57,10 @@ public class DemoTest {
     @Test
     void should_release_the_lock_with_error_path() {
         businessUseCase.errorPath();
+    }
+
+    @Test
+    void should_only_one_thread_get_the_lock_for_same_identifiers() throws InterruptedException {
+        multiThreadCase.run();
     }
 }

@@ -24,6 +24,11 @@ public class NormalCase {
         String owner = Thread.currentThread().getName();
         for (int i = 0; i < 5; i++) {
             boolean lock = lockProvider.lock(serviceKey, lockKey, owner, 60);
+            if (i == 0) {
+                assert (lock);
+            } else {
+                assert (!lock);
+            }
             log.info("Iteration with {} and lock result {}", i, lock);
         }
         lockProvider.releaseAllLock();

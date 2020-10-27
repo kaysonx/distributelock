@@ -23,18 +23,21 @@ public class LockProvider {
     }
 
     //互斥锁，unlock 或者 超时后可获得
-    public boolean lock(String serviceName, String lockKey, String owner, int expireSeconds) {
-        if (existLock(serviceName, lockKey, owner)) {
+    public synchronized boolean lock(String serviceName, String lockKey, String owner, int expireSeconds) {
+        if (notTimeoutOrNotExistLock(serviceName, lockKey, owner)) {
             return false;
         }
-
-        Optional<DistributeLock> existTimeoutLock = distributeLockDAO.findByServiceKeyAndLockKeyAndOwner(serviceName, lockKey, owner);
-        if (existTimeoutLock.isPresent()) {
-            _renewLock(existTimeoutLock.get());
-        } else {
-            distributeLockDAO.addLock(serviceName, lockKey, owner, expireSeconds);
+        try {
+            Optional<DistributeLock> existTimeoutLock = distributeLockDAO.findByServiceKeyAndLockKeyAndOwner(serviceName, lockKey, owner);
+            if (existTimeoutLock.isPresent()) {
+                _renewLock(existTimeoutLock.get());
+            } else {
+                distributeLockDAO.addLock(serviceName, lockKey, owner, expireSeconds);
+            }
+        } catch (Exception e) {
+            log.info("Duplicate lock added with:", e);
+            return false;
         }
-
         return true;
     }
 
@@ -51,7 +54,7 @@ public class LockProvider {
     public boolean lockWithWatchDog(String serviceName, String lockKey, String owner, int expireSeconds) {
         if (this.lock(serviceName, lockKey, owner, expireSeconds)) {
             log.info("Will add watch dog to renew lock...");
-            executorService.submit(new WatchDog(this, Thread.currentThread(), serviceName, lockKey, owner, expireSeconds));
+            executorService.submit(new WatchDog(this, Thread.currentThread(), serviceName, lockKey, owner));
             return true;
         }
         return false;
@@ -59,13 +62,15 @@ public class LockProvider {
 
     //可以重复调用
     public void unlock(String serviceName, String lockKey, String owner) {
-        Optional<DistributeLock> lockOptional = distributeLockDAO.findByServiceKeyAndLockKeyAndOwner(serviceName, lockKey, owner);
-        lockOptional.ifPresent(lock -> distributeLockDAO.deleteById(lock.getId()));
+        distributeLockDAO.findByServiceKeyAndLockKeyAndOwner(serviceName, lockKey, owner).ifPresent(lock -> distributeLockDAO.deleteById(lock.getId()));
     }
 
-    public boolean existLock(String serviceName, String lockKey, String owner) {
-        final int existLock = distributeLockDAO.exists(serviceName, lockKey, owner);
-        return existLock == 1;
+    public boolean notTimeoutOrNotExistLock(String serviceName, String lockKey, String owner) {
+        return distributeLockDAO.exists(serviceName, lockKey, owner) == 1;
+    }
+
+    public boolean exist(String serviceName, String lockKey, String owner) {
+        return distributeLockDAO.findByServiceKeyAndLockKeyAndOwner(serviceName, lockKey, owner).isPresent();
     }
 
     //For Scheduling

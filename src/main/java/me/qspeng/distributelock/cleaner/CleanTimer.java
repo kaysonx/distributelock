@@ -15,7 +15,7 @@ public class CleanTimer {
         log.info("Scheduled timout lock cleaner is started....");
     }
 
-    @Scheduled(cron = "0/10 * *  * * ? ")
+    @Scheduled(fixedRate = 10 * 1000, initialDelay = 20 * 1000)
     public void cleanTimoutLock() {
         log.info("Will clean all the timeout lock...");
         int timeoutLocks = lockProvider.releaseAllTimeoutLock();

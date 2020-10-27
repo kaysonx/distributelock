@@ -8,22 +8,19 @@ import java.util.TimerTask;
 
 @Slf4j
 public class WatchDog implements Runnable {
-    private final static int refreshGap = 10;
-
     private final LockProvider lockProvider;
     private final String serviceName;
     private final String lockKey;
     private final String owner;
-    private final int refreshInterval;
+    private final int refreshInterval = 1;
 
     private final Thread businessThread;
 
-    public WatchDog(LockProvider lockProvider, Thread thread, String serviceName, String lockKey, String owner, int expireSeconds) {
+    public WatchDog(LockProvider lockProvider, Thread thread, String serviceName, String lockKey, String owner) {
         this.lockProvider = lockProvider;
         this.serviceName = serviceName;
         this.lockKey = lockKey;
         this.owner = owner;
-        this.refreshInterval = Math.max(5, expireSeconds - refreshGap);
         this.businessThread = thread;
     }
 
@@ -33,7 +30,7 @@ public class WatchDog implements Runnable {
         timer.schedule(new TimerTask() {
             @Override
             public void run() {
-                if (!businessThread.isAlive() || !lockProvider.existLock(serviceName, lockKey, owner)) {
+                if (!businessThread.isAlive() || !lockProvider.exist(serviceName, lockKey, owner)) {
                     log.info("Lock for {} is released, will shutdown self...", lockKey);
                     timer.cancel();
                 } else {

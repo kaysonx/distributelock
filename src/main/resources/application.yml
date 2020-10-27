@@ -6,7 +6,7 @@ spring:
   jpa:
     hibernate:
       ddl-auto: none
-    show-sql: true
+    show-sql: false
   datasource:
     initialization-mode: always
     url: ${DB_URL}

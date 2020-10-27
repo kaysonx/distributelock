@@ -25,6 +25,8 @@ public class OneByOneCase {
         for (int i = 0; i < 5; i++) {
             boolean lock = lockProvider.lock(serviceKey, lockKey, owner, 60);
             log.info("Iteration with {} and lock result {}", i, lock);
+
+            assert(lock);
             lockProvider.unlock(serviceKey, lockKey, owner);
         }
     }
