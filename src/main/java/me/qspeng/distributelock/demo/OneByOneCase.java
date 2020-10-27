@@ -2,17 +2,19 @@ package me.qspeng.distributelock.demo;
 
 import lombok.extern.slf4j.Slf4j;
 import me.qspeng.distributelock.lock.LockProvider;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 @Component
 @Slf4j
 public class OneByOneCase {
-    @Autowired
-    private LockProvider lockProvider;
     @Value("${service.key}")
     private String serviceKey;
+    private final LockProvider lockProvider;
+
+    public OneByOneCase(LockProvider lockProvider) {
+        this.lockProvider = lockProvider;
+    }
 
     public void run() {
         String lockKey = "mock-key";

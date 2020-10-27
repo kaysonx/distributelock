@@ -18,6 +18,7 @@ spring:
     clean-on-validation-error: false
 service:
   key: demo-svc
+  threads: 20
 logging:
   file:
     name: /var/log/distribute-lock.log

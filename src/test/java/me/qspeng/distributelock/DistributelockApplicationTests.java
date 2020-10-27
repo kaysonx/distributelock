@@ -1,7 +1,6 @@
 package me.qspeng.distributelock;
 
 import me.qspeng.distributelock.lock.LockProvider;
-import me.qspeng.distributelock.lock.persist.DistributeLockDAO;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
