@@ -18,11 +18,12 @@ public class BusinessUseCase {
         this.lockProvider = lockProvider;
     }
 
+    //可以释放锁
     public void happyPath() {
         String lockKey = "mock-key-" + UUID.randomUUID().toString();
         String owner = Thread.currentThread().getName();
-        boolean lockResult = lockProvider.lock(serviceKey, lockKey, owner, 3);
-        if (lockResult) {
+        boolean lock = lockProvider.lock(serviceKey, lockKey, owner, 3);
+        if (lock) {
             try {
                 log.info("Mock some business working...");
                 log.info("Mock some rpc invoke now....");
@@ -38,11 +39,12 @@ public class BusinessUseCase {
         }
     }
 
+    //可以释放锁
     public void errorPath() {
         String lockKey = "mock-key-" + UUID.randomUUID().toString();
         String owner = Thread.currentThread().getName();
-        boolean lockResult = lockProvider.lock(serviceKey, lockKey, owner, 3);
-        if (lockResult) {
+        boolean lock = lockProvider.lock(serviceKey, lockKey, owner, 3);
+        if (lock) {
             try {
                 log.info("Mock some business working...");
                 log.info("Mock some rpc invoke now....");

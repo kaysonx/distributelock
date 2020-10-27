@@ -18,12 +18,13 @@ public class OneByOneCase {
         this.lockProvider = lockProvider;
     }
 
+    //每一个都能拿到
     public void run() {
         String lockKey = "mock-key-" + UUID.randomUUID().toString();
         String owner = Thread.currentThread().getName();
         for (int i = 0; i < 5; i++) {
-            boolean lockResult = lockProvider.lock(serviceKey, lockKey, owner, 60);
-            log.info("Iteration with {} and lock result {}", i, lockResult);
+            boolean lock = lockProvider.lock(serviceKey, lockKey, owner, 60);
+            log.info("Iteration with {} and lock result {}", i, lock);
             lockProvider.unlock(serviceKey, lockKey, owner);
         }
     }

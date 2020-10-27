@@ -18,12 +18,13 @@ public class NormalCase {
         this.lockProvider = lockProvider;
     }
 
+    //只会有一个能拿到锁
     public void run() {
         String lockKey = "mock-key-" + UUID.randomUUID().toString();
         String owner = Thread.currentThread().getName();
         for (int i = 0; i < 5; i++) {
-            boolean lockResult = lockProvider.lock(serviceKey, lockKey, owner, 60);
-            log.info("Iteration with {} and lock result {}", i, lockResult);
+            boolean lock = lockProvider.lock(serviceKey, lockKey, owner, 60);
+            log.info("Iteration with {} and lock result {}", i, lock);
         }
         lockProvider.releaseAllLock();
     }

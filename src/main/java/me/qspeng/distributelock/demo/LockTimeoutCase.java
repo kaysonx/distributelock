@@ -18,13 +18,14 @@ public class LockTimeoutCase {
         this.lockProvider = lockProvider;
     }
 
+    //超时后锁自动释放 后续操作可以拿到锁
     public void run() throws InterruptedException {
         String lockKey = "mock-key-" + UUID.randomUUID().toString();
         String owner = Thread.currentThread().getName();
-        boolean lockResult = lockProvider.lock(serviceKey, lockKey, owner, 3);
-        log.info("First time get lock result {}", lockResult);
+        boolean lock = lockProvider.lock(serviceKey, lockKey, owner, 3);
+        log.info("First time get lock result {}", lock);
         Thread.sleep(5 * 1000);
-        boolean lockResultAfterTimeout = lockProvider.lock(serviceKey, lockKey, owner, 10);
-        log.info("After timeout get lock result {}", lockResultAfterTimeout);
+        boolean lockAfterTimeout = lockProvider.lock(serviceKey, lockKey, owner, 10);
+        log.info("After timeout get lock result {}", lockAfterTimeout);
     }
 }
