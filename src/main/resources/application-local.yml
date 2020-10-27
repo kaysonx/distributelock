@@ -1,0 +1,8 @@
+spring:
+  datasource:
+    url: jdbc:mysql://localhost:3306/distribute-lock-local?serverTimezone=Asia/Shanghai&characterEncoding=utf-8
+    username: root
+    password: upassword
+    driver-class-name: com.mysql.jdbc.Driver
+  flyway:
+    clean-on-validation-error: true
