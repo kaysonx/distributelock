@@ -55,14 +55,19 @@ public class LockProvider {
         return existLock == 1;
     }
 
-    //For Test Clean
-    public void releaseAllLock() {
-        distributeLockDAO.deleteAll();
-    }
-
     public int releaseAllTimeoutLock() {
         List<DistributeLock> timeoutLocks = distributeLockDAO.findAllTimeoutLocks();
         distributeLockDAO.deleteAll(timeoutLocks);
         return timeoutLocks.size();
+    }
+
+    //For Test Using
+    public void releaseAllLock() {
+        distributeLockDAO.deleteAll();
+    }
+
+    //For Test Using
+    public List<DistributeLock> getAllLocks() {
+        return distributeLockDAO.findAll();
     }
 }

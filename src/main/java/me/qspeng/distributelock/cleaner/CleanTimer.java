@@ -13,6 +13,7 @@ public class CleanTimer {
 
     public CleanTimer(LockProvider lockProvider) {
         this.lockProvider = lockProvider;
+        log.info("Scheduled timout lock cleaner is started....");
     }
 
     @Scheduled(cron = "0/10 * *  * * ? ")

@@ -14,7 +14,7 @@ public interface DistributeLockDAO extends JpaRepository<DistributeLock, Integer
     int exists(@Param("serviceKey") String serviceKey, @Param("lockKey") String lockKey, @Param("owner") String owner);
 
 
-    @Query(value = "select dl.id, dl.service_key, dl.lock_key, dl.owner, dl.expire_seconds, dl.create_time from distributed_lock dl where dl.expire_seconds < TIMESTAMPDIFF(SECOND, dl.renewal_time, NOW())", nativeQuery = true)
+    @Query(value = "select dl.id, dl.service_key, dl.lock_key, dl.owner, dl.expire_seconds, dl.create_time, dl.renewal_time from distributed_lock dl where dl.expire_seconds < TIMESTAMPDIFF(SECOND, dl.renewal_time, NOW())", nativeQuery = true)
     List<DistributeLock> findAllTimeoutLocks();
 
 
