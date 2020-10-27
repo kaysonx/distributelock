@@ -25,7 +25,8 @@ public interface DistributeLockDAO extends JpaRepository<DistributeLock, Integer
     @Query(value =
             "select dl.id, dl.service_key, dl.lock_key, dl.owner, dl.expire_seconds, dl.create_time, dl.renewal_time " +
                     "from distributed_lock dl " +
-                    "where dl.service_key = :serviceKey and dl.lock_key = :lockKey and dl.owner = :owner for update ", nativeQuery = true)
+                    "where dl.service_key = :serviceKey and dl.lock_key = :lockKey and dl.owner = :owner " +
+                    "and dl.expire_seconds > TIMESTAMPDIFF(SECOND, dl.renewal_time, NOW()) for update ", nativeQuery = true)
     Optional<DistributeLock> findByServiceKeyAndLockKeyAndOwner(@Param("serviceKey") String serviceKey, @Param("lockKey") String lockKey, @Param("owner") String owner);
 
     default DistributeLock addLock(String serviceKey, String lockKey, String owner, int expireSeconds) {

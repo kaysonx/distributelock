@@ -23,7 +23,7 @@ public class LockProvider {
     }
 
     //互斥锁，unlock 或者 超时后可获得
-    public synchronized boolean lock(String serviceName, String lockKey, String owner, int expireSeconds) {
+    public boolean lock(String serviceName, String lockKey, String owner, int expireSeconds) {
         if (notTimeoutOrNotExistLock(serviceName, lockKey, owner)) {
             return false;
         }
