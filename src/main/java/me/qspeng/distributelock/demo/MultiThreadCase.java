@@ -31,5 +31,6 @@ public class MultiThreadCase {
             }).start();
         }
         countDownLatch.await();
+        lockProvider.releaseAllLock();
     }
 }
