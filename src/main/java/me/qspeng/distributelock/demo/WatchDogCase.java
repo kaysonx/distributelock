@@ -5,6 +5,8 @@ import me.qspeng.distributelock.lock.LockProvider;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
+import java.util.UUID;
+
 @Component
 @Slf4j
 public class WatchDogCase {
@@ -17,7 +19,7 @@ public class WatchDogCase {
     }
 
     public void run() throws InterruptedException {
-        String lockKey = "mock-key";
+        String lockKey = "mock-key-" + UUID.randomUUID().toString();
         String owner = Thread.currentThread().getName();
         boolean lockResult = lockProvider.lockWithWatchDog(serviceKey, lockKey, owner, 1);
         log.info("First time get lock result {}", lockResult);
@@ -27,7 +29,7 @@ public class WatchDogCase {
     }
 
     public void runWithUnlock() throws InterruptedException {
-        String lockKey = "mock-key";
+        String lockKey = "mock-key-" + UUID.randomUUID().toString();
         String owner = Thread.currentThread().getName();
         boolean lockResult = lockProvider.lockWithWatchDog(serviceKey, lockKey, owner, 1);
         log.info("First time get lock result {}", lockResult);

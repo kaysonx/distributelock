@@ -5,6 +5,8 @@ import me.qspeng.distributelock.lock.LockProvider;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
+import java.util.UUID;
+
 @Component
 @Slf4j
 public class NormalCase {
@@ -17,7 +19,7 @@ public class NormalCase {
     }
 
     public void run() {
-        String lockKey = "mock-key";
+        String lockKey = "mock-key-" + UUID.randomUUID().toString();
         String owner = Thread.currentThread().getName();
         for (int i = 0; i < 5; i++) {
             boolean lockResult = lockProvider.lock(serviceKey, lockKey, owner, 60);

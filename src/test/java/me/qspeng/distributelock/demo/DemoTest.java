@@ -18,6 +18,9 @@ public class DemoTest {
     @Autowired
     WatchDogCase watchDogCase;
 
+    @Autowired
+    BusinessUseCase businessUseCase;
+
     @Test
     void should_only_one_operation_get_lock() {
         normalCase.run();
@@ -41,5 +44,15 @@ public class DemoTest {
     @Test
     void should_get_lock_when_business_release_the_lock_() throws InterruptedException {
         watchDogCase.runWithUnlock();
+    }
+
+    @Test
+    void should_release_the_lock_with_happy_path() {
+        businessUseCase.happyPath();
+    }
+
+    @Test
+    void should_release_the_lock_with_error_path() {
+        businessUseCase.errorPath();
     }
 }

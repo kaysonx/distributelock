@@ -5,6 +5,8 @@ import me.qspeng.distributelock.lock.LockProvider;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
+import java.util.UUID;
+
 @Component
 @Slf4j
 public class LockTimeoutCase {
@@ -17,7 +19,7 @@ public class LockTimeoutCase {
     }
 
     public void run() throws InterruptedException {
-        String lockKey = "mock-key";
+        String lockKey = "mock-key-" + UUID.randomUUID().toString();
         String owner = Thread.currentThread().getName();
         boolean lockResult = lockProvider.lock(serviceKey, lockKey, owner, 3);
         log.info("First time get lock result {}", lockResult);
