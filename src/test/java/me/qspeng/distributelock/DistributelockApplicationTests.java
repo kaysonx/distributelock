@@ -13,7 +13,7 @@ class DistributelockApplicationTests {
 
     @Test
     void should_insert_lock_correctly() {
-        lockProvider.lock("mock_svc", "mock_key", "jerrs", 10);
+        lockProvider.lock("mock_svc", "mock_key", "jerrs", 5);
         System.out.println("Finished...");
     }
 }

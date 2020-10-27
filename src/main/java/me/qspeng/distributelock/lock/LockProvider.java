@@ -5,6 +5,8 @@ import me.qspeng.distributelock.lock.entity.DistributeLock;
 import me.qspeng.distributelock.lock.persist.DistributeLockDAO;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -21,8 +23,19 @@ public class LockProvider {
         if (existLock(serviceName, lockKey, owner)) {
             return false;
         }
-        DistributeLock lock = distributeLockDAO.addLock(serviceName, lockKey, owner, expireSeconds);
+
+        Optional<DistributeLock> existTimeoutLock = distributeLockDAO.findByServiceKeyAndLockKeyAndOwner(serviceName, lockKey, owner);
+        if (existTimeoutLock.isPresent()) {
+            renewLock(existTimeoutLock.get());
+        } else {
+            distributeLockDAO.addLock(serviceName, lockKey, owner, expireSeconds);
+        }
         return true;
+    }
+
+    private void renewLock(DistributeLock existLock) {
+        existLock.setRenewalTime(new Date());
+        distributeLockDAO.save(existLock);
     }
 
     //自动续约
@@ -45,5 +58,11 @@ public class LockProvider {
     //For Test Clean
     public void releaseAllLock() {
         distributeLockDAO.deleteAll();
+    }
+
+    public int releaseAllTimeoutLock() {
+        List<DistributeLock> timeoutLocks = distributeLockDAO.findAllTimeoutLocks();
+        distributeLockDAO.deleteAll(timeoutLocks);
+        return timeoutLocks.size();
     }
 }

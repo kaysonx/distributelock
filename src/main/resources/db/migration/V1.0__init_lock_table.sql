@@ -6,6 +6,7 @@ CREATE TABLE `distributed_lock`
     `owner`          char(36)    NOT NULL COMMENT 'Owner',
     `expire_seconds` int         NOT NULL COMMENT 'Timeout/Second',
     `create_time`    timestamp   NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT 'Create Time',
+    `renewal_time`   timestamp   NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT 'Lock Renewal Time',
     PRIMARY KEY (`id`),
     UNIQUE KEY `u_key_service_key_lock_key_owner` (`service_key`, `lock_key`, `owner`)
 ) ENGINE = InnoDB

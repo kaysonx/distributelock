@@ -22,7 +22,10 @@ public class DistributeLock {
     private int expireSeconds;
     @CreatedDate
     @Column(updatable = false, nullable = false)
-    private Date createTime;
+    private Date createTime = new Date();
+
+    @Column(nullable = false)
+    private Date renewalTime = new Date();
 
     public DistributeLock(String serviceKey, String lockKey, String owner, int expireSeconds) {
         this.serviceKey = serviceKey;
