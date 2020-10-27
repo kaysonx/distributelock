@@ -62,7 +62,7 @@ public class LockProvider {
 
     //可以重复调用
     public void unlock(String serviceName, String lockKey, String owner) {
-        distributeLockDAO.findTimeoutLock(serviceName, lockKey, owner).ifPresent(lock -> distributeLockDAO.deleteById(lock.getId()));
+        distributeLockDAO.findByServiceKeyAndLockKeyAndOwner(serviceName, lockKey, owner).ifPresent(lock -> distributeLockDAO.deleteById(lock.getId()));
     }
 
     public boolean notTimeoutOrNotExistLock(String serviceName, String lockKey, String owner) {
@@ -70,7 +70,7 @@ public class LockProvider {
     }
 
     public boolean exist(String serviceName, String lockKey, String owner) {
-        return distributeLockDAO.findTimeoutLock(serviceName, lockKey, owner).isPresent();
+        return distributeLockDAO.findByServiceKeyAndLockKeyAndOwner(serviceName, lockKey, owner).isPresent();
     }
 
     //For Scheduling

@@ -18,22 +18,22 @@ public class WatchDogCase {
         this.lockProvider = lockProvider;
     }
 
-    //第二次依旧能拿到，因为有续约
+    //第二次不能拿到，因为有续约
     public void run() throws InterruptedException {
         String lockKey = "mock-key-" + UUID.randomUUID().toString();
         String owner = Thread.currentThread().getName();
-        boolean lock = lockProvider.lockWithWatchDog(serviceKey, lockKey, owner, 3);
+        boolean lock = lockProvider.lockWithWatchDog(serviceKey, lockKey, owner, 4);
 
         log.info("First time get lock result {}", lock);
         assert (lock);
-        Thread.sleep(5 * 1000);
+        Thread.sleep(10 * 1000);
 
         boolean lockAfterTimeout = lockProvider.lock(serviceKey, lockKey, owner, 10);
         log.info("After timeout get lock result {}", lockAfterTimeout);
         assert (!lockAfterTimeout);
     }
 
-    //第二次拿不到锁，因为中途方法执行完毕，手动释放Lock
+    //第二次可以拿到锁，因为中途方法执行完毕，手动释放Lock
     public void runWithUnlock() throws InterruptedException {
         String lockKey = "mock-key-" + UUID.randomUUID().toString();
         String owner = Thread.currentThread().getName();

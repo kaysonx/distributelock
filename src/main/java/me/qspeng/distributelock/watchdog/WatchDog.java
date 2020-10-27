@@ -35,7 +35,11 @@ public class WatchDog implements Runnable {
                     timer.cancel();
                 } else {
                     log.info("Will renew lock now...");
-                    lockProvider.renewLock(serviceName, lockKey, owner);
+                    try {
+                        lockProvider.renewLock(serviceName, lockKey, owner);
+                    } catch (Exception ex) {
+                        log.info("May be released lock by owner now...");
+                    }
                 }
             }
         }, 0, refreshInterval * 1000);
