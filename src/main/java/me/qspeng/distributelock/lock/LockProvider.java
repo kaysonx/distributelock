@@ -28,7 +28,7 @@ public class LockProvider {
             return false;
         }
         try {
-            Optional<DistributeLock> existTimeoutLock = distributeLockDAO.findByServiceKeyAndLockKeyAndOwner(serviceName, lockKey, owner);
+            Optional<DistributeLock> existTimeoutLock = distributeLockDAO.findTimeoutLock(serviceName, lockKey, owner);
             if (existTimeoutLock.isPresent()) {
                 _renewLock(existTimeoutLock.get());
             } else {
@@ -42,7 +42,7 @@ public class LockProvider {
     }
 
     public void renewLock(String serviceName, String lockKey, String owner) {
-        distributeLockDAO.findByServiceKeyAndLockKeyAndOwner(serviceName, lockKey, owner).ifPresent(this::_renewLock);
+        distributeLockDAO.findTimeoutLock(serviceName, lockKey, owner).ifPresent(this::_renewLock);
     }
 
     private void _renewLock(DistributeLock existLock) {
@@ -62,7 +62,7 @@ public class LockProvider {
 
     //可以重复调用
     public void unlock(String serviceName, String lockKey, String owner) {
-        distributeLockDAO.findByServiceKeyAndLockKeyAndOwner(serviceName, lockKey, owner).ifPresent(lock -> distributeLockDAO.deleteById(lock.getId()));
+        distributeLockDAO.findTimeoutLock(serviceName, lockKey, owner).ifPresent(lock -> distributeLockDAO.deleteById(lock.getId()));
     }
 
     public boolean notTimeoutOrNotExistLock(String serviceName, String lockKey, String owner) {
@@ -70,7 +70,7 @@ public class LockProvider {
     }
 
     public boolean exist(String serviceName, String lockKey, String owner) {
-        return distributeLockDAO.findByServiceKeyAndLockKeyAndOwner(serviceName, lockKey, owner).isPresent();
+        return distributeLockDAO.findTimeoutLock(serviceName, lockKey, owner).isPresent();
     }
 
     //For Scheduling
