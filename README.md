@@ -7,7 +7,7 @@ docker-compose up -d
 ```
 
 ### 测试Case
-在测试的Demo目录下
+在测试的Demo目录下， 没有保证Case的独立性。需要Case by case running.
 
 ### 功能模块
 lock: 使用数据库实现了分布式锁，同一业务标识互斥(比如Service Key一致，Owner一致，方法名称和参数构成的Lock Key一致)  
